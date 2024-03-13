@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import { FacultyNavbar } from '../Navbar/FacultyNavbar'
 
-const addQuestions = () => {
+const Questions = () => {
      const { tech } = useParams();
      const [questions, setQuestions] = useState([]);
      const [error, setError] = useState("");
@@ -115,4 +115,4 @@ const addQuestions = () => {
      )
 }
 
-export default addQuestions
+export default Questions
