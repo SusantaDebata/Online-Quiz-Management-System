@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { AdminNavbar } from '../Navbar/AdminNavbar';
+import { GetUserAnswers } from '../../Services/UserService';
 
 const ShowUserResponse = () => {
     const [responses, setResponses] = useState([]);
@@ -13,9 +13,10 @@ const ShowUserResponse = () => {
 
     const fetchUserResponses = async () => {
         try {
-            const response = await axios.get(
-                "http://localhost:8080/api/user-answers"
-            );
+            // const response = await axios.get(
+            //     "http://localhost:8080/api/user-answers"
+            // );
+            const response = await GetUserAnswers();
             setResponses(response.data);
         } catch (error) {
             setError("Failed to fetch user responses");
