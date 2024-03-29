@@ -6,8 +6,8 @@ import Greeting from "../Greeting";
 import { useEffect, useState } from "react";
 import { CategorySelectUser } from "../../Services/UserService";
 import CardDisplay from "./CardDisplay";
-import axios from "axios";
-import { createContext } from "react"
+import { createContext } from "react";
+import { GetAllQuestion, GetAllQuizzes } from "../../Services/Questionquiz";
 
 const ID = createContext();
 
@@ -46,18 +46,22 @@ const AdminLogin = () => {
     }).catch(error => console.log(error))
 
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/questions/getAllQuestion"
-      );
+      // const response = await axios.get(
+      //   "http://localhost:8080/api/questions/getAllQuestion"
+      // );
+
+      const response= await GetAllQuestion();
       setQues(response.data.length)
     } catch (error) {
       setError("Failed to fetch questions");
     }
 
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/quizzes"
-      );
+      // const response = await axios.get(
+      //   "http://localhost:8080/api/quizzes"
+      // );
+
+      const response  = await GetAllQuizzes();
       setQuiz(response.data.length)
     } catch (error) {
       setError("Failed to fetch quizz");
