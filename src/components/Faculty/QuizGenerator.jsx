@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { FacultyNavbar } from "../Navbar/FacultyNavbar"
-import axios from 'axios';
 import './styles/QuizGenerator.css'
+import { AddQuiz, GetAllQuestion } from '../../Services/Questionquiz';
+import { GetAllUser } from '../../Services/UserService';
 
 const QuizGenerator = () => {
     const [users, setUsers] = useState([]);
@@ -37,9 +38,10 @@ const QuizGenerator = () => {
 
     const fetchQuestions = async () => {
         try {
-            const response = await axios.get(
-                "http://localhost:8080/api/questions/getAllQuestion"
-            );
+            // const response = await axios.get(
+            //     "http://localhost:8080/api/questions/getAllQuestion"
+            // );
+            const response = await GetAllQuestion();
             setQuestions(response.data);
 
             const distinctTechnologies = [
@@ -54,9 +56,10 @@ const QuizGenerator = () => {
 
     const getusers = async () => {
         try {
-            const response = await axios.get(
-                "http://localhost:8080/api/users"
-            );
+            // const response = await axios.get(
+            //     "http://localhost:8080/api/users"
+            // );
+            const response = await GetAllUser();
             setUsers([]);
             const Users = [
                 ...new Set(response.data.map((users) => {
@@ -98,8 +101,9 @@ const QuizGenerator = () => {
 
         console.log("Req", quizData);
 
-        axios
-            .post("http://localhost:8080/api/quizzes", quizData)
+        // axios
+        //     .post("http://localhost:8080/api/quizzes", quizData)
+        AddQuiz(quizData)
             .then((response) => {
                 console.log("Quiz generated successfully:", response.data);
             })
