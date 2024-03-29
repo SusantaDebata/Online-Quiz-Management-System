@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AdminNavbar } from "../Navbar/AdminNavbar"
-import axios from 'axios'
+import { DeleteQuiz, GetAllQuizzes } from '../../Services/Questionquiz';
 
 const ShowQuizzes = () => {
      const [quizz, setQuizzes] = useState([]);
@@ -12,9 +12,10 @@ const ShowQuizzes = () => {
  
    const fetchQuizzes = async () => {
      try {
-       const response = await axios.get(
-         "http://localhost:8080/api/quizzes"
-       );
+      //  const response = await axios.get(
+      //    "http://localhost:8080/api/quizzes"
+      //  );
+      const response = await GetAllQuizzes();
        setQuizzes(response.data);
      } catch (error) {
        setError("Failed to fetch questions");
@@ -24,7 +25,8 @@ const ShowQuizzes = () => {
    const handleDeleteQuizzes = async (id) => {
      try {
        console.log(id);
-       await axios.delete(`http://localhost:8080/api/quizzes/${id}`);
+      //  await axios.delete(`http://localhost:8080/api/quizzes/${id}`);
+      await DeleteQuiz(id);
        fetchQuizzes(); // Refresh the question list
      } catch (error) {
        setError("Failed to delete question");
@@ -55,7 +57,7 @@ const ShowQuizzes = () => {
                     <button
                       className="btn btn-outline-danger"
                       onClick={() => handleDeleteQuizzes(quizz.id)}
-                   >
+                    >
                       Delete
                     </button>
                   </td>
