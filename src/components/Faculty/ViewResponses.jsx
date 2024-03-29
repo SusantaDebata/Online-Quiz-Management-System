@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { FacultyNavbar } from '../Navbar/FacultyNavbar';
+import { GetUserAnswers } from '../../Services/UserService';
 
 const ViewResponses = () => {
      const [responses, setResponses] = useState([]);
@@ -12,9 +12,10 @@ const ViewResponses = () => {
   
       const fetchUserResponses = async () => {
           try {
-              const response = await axios.get(
-                  "http://localhost:8080/api/user-answers"
-              );
+            //   const response = await axios.get(
+            //       "http://localhost:8080/api/user-answers"
+            //   );
+            const response = await GetUserAnswers();
               setResponses(response.data);
           } catch (error) {
               setError("Failed to fetch user responses");
