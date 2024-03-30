@@ -5,7 +5,7 @@ import Greeting from "../Greeting";
 import { useEffect, useState } from "react";
 import { CategorySelectUser } from "../../Services/UserService";
 import CardDisplay from "../Admin/CardDisplay";
-import axios from "axios";
+import { GetAllQuestion, GetAllQuizzes } from "../../Services/Questionquiz";
 
 const FacultyDashboard = () => {
      const [user, setUser] = useState([]);
@@ -30,18 +30,20 @@ const FacultyDashboard = () => {
           }).catch(error => console.log(error))
 
           try {
-               const response = await axios.get(
-                    "http://localhost:8080/api/questions/getAllQuestion"
-               );
+               // const response = await axios.get(
+               //      "http://localhost:8080/api/questions/getAllQuestion"
+               // );
+               const response = await GetAllQuestion();
                setQues(response.data.length)
           } catch (error) {
                setError("Failed to fetch questions");
           }
 
           try {
-               const response = await axios.get(
-                    "http://localhost:8080/api/quizzes"
-               );
+               // const response = await axios.get(
+               //      "http://localhost:8080/api/quizzes"
+               // );
+               const response = await GetAllQuizzes();
                setQuiz(response.data.length)
           } catch (error) {
                setError("Failed to fetch quizz");
