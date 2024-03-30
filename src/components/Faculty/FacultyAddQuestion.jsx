@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import { useState } from "react";
 import { FacultyNavbar } from "../Navbar/FacultyNavbar";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { AddNewQuestion } from "../../Services/Questionquiz";
 
 const FacultyAddQuestion = () => {
     const [question, setQuestion] = useState("");
@@ -48,7 +48,8 @@ const FacultyAddQuestion = () => {
 
         };
         try {
-            await axios.post("http://localhost:8080/api/questions/addquestion", newQuestion);
+            // await axios.post("http://localhost:8080/api/questions/addquestion", newQuestion);
+            await AddNewQuestion(newQuestion);
             const res = Response.data;
             if (res.status == 200) {
                 setQuestion("");
