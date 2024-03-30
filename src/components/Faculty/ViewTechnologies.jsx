@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { FacultyNavbar } from "../Navbar/FacultyNavbar";
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import "./styles/ViewTechnologies.css"
+import { GetAllQuestion } from '../../Services/Questionquiz';
 
 const ViewTechnologies = () => {
      const [tech, setTech] = useState([]);
@@ -14,7 +14,8 @@ const ViewTechnologies = () => {
 
      const fetchtech = async () => {
           try {
-               const res = await axios.get("http://localhost:8080/api/questions/getAllQuestion");
+              //  const res = await axios.get("http://localhost:8080/api/questions/getAllQuestion");
+              const res = await GetAllQuestion();
                const distinctTech = [
                 ...new Set(res.data.map((tech)=> tech.technology)),
               ];
