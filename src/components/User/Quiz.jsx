@@ -29,7 +29,73 @@ const Quiz = (props) => {
     });
   };
 
-  
+  const sumitauto = async() => {
+    let marks = 0;
+    for (const userAnswer of selectedOptions) {
+    const { questionId, optionNumber } = userAnswer;
+    const userAnswers = {
+      userId: props.uid, // Replace with the actual user ID
+      questionId: questionId,
+      selectedOption: optionNumber,
+    };
+    console.log(userAnswers);
+    const response = await SubmitAnswer(userAnswers);
+    console.log("User answer submitted:", response.data);
+    const selectedQuestion = props.quizQuest.find(
+      (question) => question.id === questionId
+    );
+    if (selectedQuestion.correctOption === optionNumber) {
+      marks += 1;
+    }
+    setTotalMarks(marks);
+    props.onSubmit(count+1);
+  }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      let marks = 0; // Variable to store the total marks
+
+      // Send each user answer individually to the backend for saving
+      for (const userAnswer of selectedOptions) {
+        const { questionId, optionNumber } = userAnswer;
+
+        const userAnswers = {
+          userId: props.uid, // Replace with the actual user ID
+          questionId: questionId,
+          selectedOption: optionNumber,
+        };
+
+        console.log(userAnswers);
+
+        // const response = await axios.post("http://localhost:8080/api/user-answers", userAnswers);
+        const response = await SubmitAnswer(userAnswers);
+        console.log("User answer submitted:", response.data);
+
+        // Increment the marks if the selected option is correct
+        const selectedQuestion = props.quizQuest.find(
+          (question) => question.id === questionId
+        );
+        // console.log("Quest id", questionId);
+        // console.log("Correct id", selectedQuestion.correctOption);
+        // console.log("Quest id", selectedQuestion);
+        if (selectedQuestion.correctOption === optionNumber) {
+          marks += 1;
+        }
+      }
+
+      setTotalMarks(marks); // Update the total marks state
+      props.onSubmit(count+1);
+    } catch (error) {
+      props.errordis("Failed to submit quiz");
+    }
+  };
+
+  console.log(totalMarks);
+
+  console.log(props.question);
 
   return (
     <div key={props.question.id} className="mb-3">
