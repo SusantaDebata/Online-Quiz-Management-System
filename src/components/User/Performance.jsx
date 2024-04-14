@@ -22,6 +22,47 @@ const fetchperformance = async() =>{
   }
 }
 
+  const tech = [
+    {
+      percent: 20,
+      tech: 'C'
+    },
+    {
+      percent: 50,
+      tech: 'C++'
+    },
+    {
+      percent: 63,
+      tech: 'C#'
+    },
+    {
+      percent: 95,
+      tech: 'Java'
+    },
+    {
+      percent: 36,
+      tech: 'Dotnet'
+    },
+    {
+      percent: 86,
+      tech: 'Python'
+    },
+    {
+      percent: 75,
+      tech: 'Javascript'
+    },
+    {
+      percent: 68,
+      tech: 'React'
+    },
+    {
+      percent: 72,
+      tech: 'Angular'
+    }
+  ]
+
+  const valueFormatter = (value) => `${value}%`;
+
   return (
     <div>
       <UserNavbar />
