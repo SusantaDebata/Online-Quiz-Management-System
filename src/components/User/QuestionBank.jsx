@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import UserNavbar from '../Navbar/UserNavbar';
 import { GetAllQuestion } from '../../Services/Questionquiz';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import QuestionBankQuiz from './QuestionBankQuiz';
 
 const QuestionBank = () => {
      const [questions, setQuestions] = useState([]);
      const [error, setError] = useState("");
+     const [page, setPage] = useState(1);
+     const [currentset, setCurrentset] = useState([]);
+     const quesno = Math.ceil(questions.length / 5);
 
      useEffect(() => {
           fetchQuestions();
@@ -17,10 +23,28 @@ const QuestionBank = () => {
                // );
                const response = await GetAllQuestion();
                setQuestions(response.data);
+               for (let i = 0; i < page * 5; i++) {
+                    if (questions[i] != null)
+                         setCurrentset(...currentset,JSON.stringify(questions[i]));
+                    else
+                         break;
+               }
           } catch (error) {
                setError("Failed to fetch questions");
           }
      };
+
+     const changepage = (e, value) => {
+          setPage(value);
+          for (let i = 0; i < page * 5; i++) {
+               if (questions[i] != null)
+                    setCurrentset(...currentset,JSON.stringify(questions[i]));
+               else
+                    break;
+          }
+     }
+
+     console.log("currentset : " + currentset);
 
      return (
           <div>
@@ -28,32 +52,16 @@ const QuestionBank = () => {
                <div className="container">
                     <h2 className="mt-4 mb-3">Question Bank</h2>
                     {questions.length > 0 ? (
-                         <table className="table table-hover table-striped">
-                              <thead className='table table-primary'>
-                                   <tr>
-                                        <th>Question</th>
-                                        <th>Option1</th>
-                                        <th>Option2</th>
-                                        <th>Option3</th>
-                                        <th>Option4</th>
-                                        <th>Correct Solution</th>
-                                        <th>Technology</th>
-                                   </tr>
-                              </thead>
-                              <tbody>
-                                   {questions.map((question) => (
-                                        <tr key={question.id}>
-                                             <td>{question.questionText}</td>
-                                             <td>{question.option1}</td>
-                                             <td>{question.option2}</td>
-                                             <td>{question.option3}</td>
-                                             <td>{question.option4}</td>
-                                             <td>{question.correctOption}</td>
-                                             <td>{question.technology}</td>
-                                        </tr>
-                                   ))}
-                              </tbody>
-                         </table>
+                         <div className="question_pallet">
+
+                              <QuestionBankQuiz data={currentset} />
+
+                              <div className='footer'>
+                                   <Stack spacing={2}>
+                                        <Pagination count={quesno} color="secondary" page={page} onChange={changepage} />
+                                   </Stack>
+                              </div>
+                         </div>
                     ) : (
                          <p>No questions found</p>
                     )}
