@@ -46,6 +46,7 @@ const ViewResponses = () => {
                                     <td>{response.questions.correctOption}</td>
                                 </tr>
                             ))}
+                             <Pagination count={resno} color="secondary" page={page} onChange={changePage} />
                         </tbody>
                     </table>
                 ) : (
