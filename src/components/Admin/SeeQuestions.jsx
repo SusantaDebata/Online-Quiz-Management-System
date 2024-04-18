@@ -101,6 +101,7 @@ const SeeQuestions = () => {
                   </td>
                 </tr>
               ))}
+              <Pagination count={quesno} color="secondary" page={page} onChange={changePage} />
             </tbody>
           </table>
         ) : (
