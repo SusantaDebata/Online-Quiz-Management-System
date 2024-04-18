@@ -1,67 +1,106 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import UserNavbar from '../Navbar/UserNavbar';
 import './Style/Performance.css';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { GetPerformancebyuid } from '../../Services/PerformanceService';
 
-const Performance = () => {
-const uid = window.sessionStorage.getItem('user');
-const [performance, setPerformance] = useState([]);
+const initialState = {
+  performance: [],
+  loading: true,
+  error: null,
+};
 
-useEffect(() => {
-  fetchperformance();
-},[]);
-
-const fetchperformance = async() =>{
-  try{
-    const res = await GetPerformancebyuid(uid);
-    setPerformance(res.data);
-    console.log(performance);
-  }catch(err){
-    console.log(err);
+const performanceReducer = (state, action) => {
+  switch (action.type) {
+    case 'FETCH_INIT':
+      return { ...initialState };
+    case 'FETCH_SUCCESS':
+      return { ...state, performance: action.payload, loading: false };
+    case 'FETCH_FAILURE':
+      return { ...state, error: action.payload, loading: false };
+    default:
+      throw new Error();
   }
-}
+};
+
+const Performance = () => {
+  const uid = window.sessionStorage.getItem('user');
+  const [state, dispatch] = useReducer(performanceReducer, initialState);
+
+  useEffect(() => {
+    fetchperformance();
+  }, []);
+
+  const fetchperformance = async () => {
+    try {
+      dispatch({ type: 'FETCH_INIT' });
+      const res = await GetPerformancebyuid(uid);
+      dispatch({ type: 'FETCH_SUCCESS', payload: res.data });
+    } catch (err) {
+      dispatch({ type: 'FETCH_FAILURE', payload: err.message });
+    }
+  };
+
+  console.log('Reducer:', state);
+
+  const valueFormatter = (value) => `${value}%`;
+
+  if (state.loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (state.error) {
+    return <div>Error: {state.error}</div>;
+  }
 
   const tech = [
     {
-      percent: 20,
+      percent: state.performance.ctech,
       tech: 'C'
     },
     {
-      percent: 50,
+      percent: state.performance.cpptech,
       tech: 'C++'
     },
     {
-      percent: 63,
+      percent: state.performance.cshtech,
       tech: 'C#'
     },
     {
-      percent: 95,
+      percent: state.performance.javatech,
       tech: 'Java'
     },
     {
-      percent: 36,
+      percent: state.performance.dotnettech,
       tech: 'Dotnet'
     },
     {
-      percent: 86,
+      percent: state.performance.pythontech,
       tech: 'Python'
     },
     {
-      percent: 75,
+      percent: state.performance.jstech,
       tech: 'Javascript'
     },
     {
-      percent: 68,
+      percent: state.performance.reacttech,
       tech: 'React'
     },
     {
-      percent: 72,
+      percent: state.performance.angulartech,
       tech: 'Angular'
     }
-  ]
+  ];
 
-  const valueFormatter = (value) => `${value}%`;
+  const colorRange = (value) => {
+    if (value < 50) {
+      return 'red';
+    } else if (value < 80) {
+      return 'yellow';
+    } else {
+      return 'green';
+    }
+  };
 
   return (
     <div>
@@ -71,12 +110,17 @@ const fetchperformance = async() =>{
           dataset={tech}
           xAxis={[{ scaleType: 'band', dataKey: 'tech' }]}
           series={[
-            { dataKey: 'percent', label: 'percent', valueFormatter },
+            {
+              dataKey: 'percent',
+              label: 'percent',
+              valueFormatter,
+              colors: (value) => colorRange(value),
+            },
           ]}
-          />
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Performance
+export default Performance;
